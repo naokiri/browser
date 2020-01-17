@@ -1,19 +1,6 @@
-import { Angulartics2 } from 'angulartics2';
-import swal from 'sweetalert';
-
-import {
-    Component,
-    ElementRef,
-    OnInit,
-    ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { BrowserApi } from '../../browser/browserApi';
-
-import { DeviceType } from 'jslib/enums/deviceType';
-
-import { ConstantsService } from 'jslib/services/constants.service';
+import { Angulartics2 } from 'angulartics2';
 
 import { CryptoService } from 'jslib/abstractions/crypto.service';
 import { EnvironmentService } from 'jslib/abstractions/environment.service';
@@ -23,6 +10,22 @@ import { MessagingService } from 'jslib/abstractions/messaging.service';
 import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
 import { UserService } from 'jslib/abstractions/user.service';
+
+import { DeviceType } from 'jslib/enums/deviceType';
+import {
+    LOCK_NEVER,
+    LOCK_ON_IDLE,
+    LOCK_ON_LOCKED,
+    LOCK_ON_RESTART,
+    LOCK_ON_SLEEP,
+    LOCK_OPTION_SPECIAL_TYPE_VALUES,
+    LockOptionSpecialType, LockOptionType, LockOptionValueType,
+} from 'jslib/enums/lockOptionType';
+
+import { ConstantsService } from 'jslib/services/constants.service';
+import swal from 'sweetalert';
+
+import { BrowserApi } from '../../browser/browserApi';
 
 const RateUrls = {
     [DeviceType.ChromeExtension]:
@@ -39,79 +42,155 @@ const RateUrls = {
         'https://apps.apple.com/app/bitwarden/id1352778147',
 };
 
+interface ILockOptionModel {
+    name: string;
+    value: LockOptionType;
+}
+
 @Component({
     selector: 'app-settings',
     templateUrl: 'settings.component.html',
 })
 export class SettingsComponent implements OnInit {
-    @ViewChild('lockOptionsSelect', { read: ElementRef }) lockOptionsSelectRef: ElementRef;
-    lockOptions: any[];
-    lockOption: number = null;
+    @ViewChild('lockOptionsSelect', {read: ElementRef}) lockOptionsSelectRef: ElementRef;
+    @ViewChild('lockDurationInput') lockDurationRef: ElementRef;
+    lockOptionTypes: ILockOptionModel[];
+    // The lock option values shown in UI.
+    lockOptionType: LockOptionType;
+    lockDurationMin: number = null;
+    // The lock option in use.
+    lockOption: LockOptionValueType = null;
     pin: boolean = null;
-    previousLockOption: number = null;
+    previousLockOption: LockOptionValueType = null;
 
     constructor(private platformUtilsService: PlatformUtilsService, private i18nService: I18nService,
-        private analytics: Angulartics2, private lockService: LockService,
-        private storageService: StorageService, public messagingService: MessagingService,
-        private router: Router, private environmentService: EnvironmentService,
-        private cryptoService: CryptoService, private userService: UserService) {
+                private analytics: Angulartics2, private lockService: LockService,
+                private storageService: StorageService, public messagingService: MessagingService,
+                private router: Router, private environmentService: EnvironmentService,
+                private cryptoService: CryptoService, private userService: UserService) {
+    }
+
+    /**
+     * @internal
+     * Convert historically used old number lockOption into the typed one.
+     */
+    lockOptionToTypedLockOption(value: number | LockOptionValueType): LockOptionValueType {
+        if (value === null) {
+            return {type: 'never', value: null};
+        } else if (typeof value === 'number') {
+            switch (value) {
+                case -1:
+                    return LOCK_ON_RESTART;
+                case -2:
+                    return LOCK_ON_LOCKED;
+                case -3:
+                    return LOCK_ON_SLEEP;
+                case -4:
+                    return LOCK_ON_IDLE;
+                default:
+                    return {type: 'numMinute', value: Math.abs(value)};
+            }
+        } else {
+            return value;
+        }
+    }
+
+    async changeLockOptionDuration(newValue: number) {
+        this.lockDurationMin = newValue;
+    }
+
+    async saveLockOptionDuration() {
+        await this.saveLockOption({type: 'numMinute', value: this.lockDurationMin});
     }
 
     async ngOnInit() {
         const showOnLocked = !this.platformUtilsService.isFirefox() && !this.platformUtilsService.isEdge()
             && !this.platformUtilsService.isSafari();
 
-        this.lockOptions = [
-            { name: this.i18nService.t('immediately'), value: 0 },
-            { name: this.i18nService.t('oneMinute'), value: 1 },
-            { name: this.i18nService.t('fiveMinutes'), value: 5 },
-            { name: this.i18nService.t('fifteenMinutes'), value: 15 },
-            { name: this.i18nService.t('thirtyMinutes'), value: 30 },
-            { name: this.i18nService.t('oneHour'), value: 60 },
-            { name: this.i18nService.t('fourHours'), value: 240 },
-            // { name: i18nService.t('onIdle'), value: -4 },
-            // { name: i18nService.t('onSleep'), value: -3 },
-        ];
+        this.lockOptionTypes = [];
 
         if (showOnLocked) {
-            this.lockOptions.push({ name: this.i18nService.t('onLocked'), value: -2 });
+            this.lockOptionTypes.push({name: this.i18nService.t('onLocked'), value: LOCK_ON_LOCKED.type});
         }
 
-        this.lockOptions.push({ name: this.i18nService.t('onRestart'), value: -1 });
-        this.lockOptions.push({ name: this.i18nService.t('never'), value: null });
+        this.lockOptionTypes.push({name: this.i18nService.t('onRestart'), value: LOCK_ON_RESTART.type});
+        this.lockOptionTypes.push({name: this.i18nService.t('never'), value: LOCK_NEVER.type});
 
-        let option = await this.storageService.get<number>(ConstantsService.lockOptionKey);
-        if (option != null) {
-            if (option === -2 && !showOnLocked) {
-                option = -1;
-            }
-            this.lockOption = option;
+        const storedOption =
+            await this.storageService.get<number | LockOptionValueType>(ConstantsService.lockOptionKey);
+        let option = this.lockOptionToTypedLockOption(storedOption);
+
+        if (option.type === LOCK_ON_LOCKED.type && !showOnLocked) {
+            option = LOCK_ON_RESTART;
         }
+        this.lockOption = option;
+        this.lockOptionType = this.lockOption.type;
+
+        if (this.lockOption.type === 'numMinute') {
+            this.lockDurationMin = this.lockOption.value;
+            this.lockOptionTypes.push({
+                name: 'input minutes to lock',
+                // name: this.i18nService.t('input minutes to lock'),
+                value: 'numMinute',
+            });
+        } else {
+            this.lockDurationMin = 30;
+            this.lockOptionTypes.push({
+                name: 'input minutes to lock',
+                // name: this.i18nService.t('input minutes to lock'),
+                value: 'numMinute',
+            });
+        }
+        await this.changeLockOptionDuration(this.lockDurationMin);
+
         this.previousLockOption = this.lockOption;
 
         const pinSet = await this.lockService.isPinLockSet();
         this.pin = pinSet[0] || pinSet[1];
     }
 
-    async saveLockOption(newValue: number) {
-        if (newValue == null) {
+    /**
+     * @internal
+     * given that user didn't confirm their selection, revert the selection of lockOptionType
+     */
+    revertLockOptionTypeUISelection() {
+        this.lockOptionTypes.forEach((option: any, i) => {
+            if (option.value === this.lockOption.type) {
+                this.lockOptionsSelectRef.nativeElement.selectedIndex = i;
+            }
+        });
+
+    }
+
+    async updateLockOptionType(newLockOptionType: LockOptionType) {
+        if (newLockOptionType === null || newLockOptionType === LOCK_NEVER.type) {
             const confirmed = await this.platformUtilsService.showDialog(
                 this.i18nService.t('neverLockWarning'), null,
                 this.i18nService.t('yes'), this.i18nService.t('cancel'), 'warning');
             if (!confirmed) {
-                this.lockOptions.forEach((option: any, i) => {
-                    if (option.value === this.lockOption) {
-                        this.lockOptionsSelectRef.nativeElement.value = i + ': ' + this.lockOption;
-                    }
-                });
-                return;
+                this.revertLockOptionTypeUISelection();
+                newLockOptionType = this.lockOption.type;
             }
         }
+
+        this.lockOptionType = newLockOptionType;
+
+        if (newLockOptionType === null || newLockOptionType !== 'numMinute') {
+            const specialLockOptionType: LockOptionSpecialType = newLockOptionType as LockOptionSpecialType;
+            this.saveLockOption(LOCK_OPTION_SPECIAL_TYPE_VALUES.get(specialLockOptionType));
+        }
+    }
+
+    async saveLockOption(lockType: LockOptionValueType) {
         this.previousLockOption = this.lockOption;
-        this.lockOption = newValue;
-        await this.lockService.setLockOption(this.lockOption != null ? this.lockOption : null);
-        if (this.previousLockOption == null) {
+        this.lockOption = lockType;
+        await this.lockService.setLockOption(this.lockOption != null ? this.lockOption.value : null);
+        if (this.previousLockOption.type === 'never') {
             this.messagingService.send('bgReseedStorage');
+        }
+        this.lockOptionType = this.lockOption.type;
+        if (this.lockOption.type === 'numMinute') {
+            this.lockDurationMin = this.lockOption.value;
         }
     }
 

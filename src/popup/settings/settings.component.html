@@ -26,10 +26,18 @@
         <div class="box-content single-line">
             <div class="box-content-row display-block" appBoxRow>
                 <label for="lockOption">{{'lockOptions' | i18n}}</label>
-                <select #lockOptionsSelect id="lockOption" name="LockOptions" [ngModel]="lockOption"
-                    (ngModelChange)="saveLockOption($event)">
-                    <option *ngFor="let o of lockOptions" [ngValue]="o.value">{{o.name}}</option>
+                <select #lockOptionsSelect id="lockOption" name="LockOptions" [ngModel]="lockOptionType"
+                    (ngModelChange)="updateLockOptionType($event)">
+                    <option *ngFor="let o of lockOptionTypes" [ngValue]="o.value">{{o.name}}</option>
                 </select>
+                <div [hidden]="lockOptionType !== 'numMinute'">
+                    <label for="lockDuration">Time to lock (minute){{ 'lockOptionDuration' | i18n }}</label>
+                    <div class="lock-duration">
+                        <input id="lockDuration" #lockDurationInput type="number" (ngModelChange)="changeLockOptionDuration($event)"
+                               [ngClass]="{'updated' : (lockOption.type !== 'numMinute') || (lockDurationMin !== lockOption.value)}" [ngModel]="lockDurationMin">
+                        <input class="btn" type="button" (click)="saveLockOptionDuration()"  value="Save">
+                    </div>
+                </div>
             </div>
             <div class="box-content-row box-content-row-checkbox" appBoxRow>
                 <label for="pin">{{'unlockWithPin' | i18n}}</label>
