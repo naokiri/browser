@@ -96,6 +96,14 @@ export class SettingsComponent implements OnInit {
     }
 
     async changeLockOptionDuration(newValue: number) {
+        if (newValue < 1) {
+            newValue = 1;
+            this.lockDurationRef.nativeElement.value = newValue;
+        }
+        if (newValue > 1440) {
+            newValue = 1440;
+            this.lockDurationRef.nativeElement.value = newValue;
+        }
         this.lockDurationMin = newValue;
     }
 
@@ -128,16 +136,15 @@ export class SettingsComponent implements OnInit {
 
         if (this.lockOption.type === 'numMinute') {
             this.lockDurationMin = this.lockOption.value;
+            // TODO: Translation
             this.lockOptionTypes.push({
-                name: 'input minutes to lock',
-                // name: this.i18nService.t('input minutes to lock'),
+                name: 'Lock after specified minutes',
                 value: 'numMinute',
             });
         } else {
             this.lockDurationMin = 30;
             this.lockOptionTypes.push({
-                name: 'input minutes to lock',
-                // name: this.i18nService.t('input minutes to lock'),
+                name: 'Lock after specified minutes',
                 value: 'numMinute',
             });
         }

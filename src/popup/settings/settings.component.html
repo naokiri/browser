@@ -31,7 +31,8 @@
                     <option *ngFor="let o of lockOptionTypes" [ngValue]="o.value">{{o.name}}</option>
                 </select>
                 <div [hidden]="lockOptionType !== 'numMinute'">
-                    <label for="lockDuration">Time to lock (minute){{ 'lockOptionDuration' | i18n }}</label>
+                    <!-- TODO: Translation -->
+                    <label for="lockDuration">Time to lock (minute)</label>
                     <div class="lock-duration">
                         <input id="lockDuration" #lockDurationInput type="number" (ngModelChange)="changeLockOptionDuration($event)"
                                [ngClass]="{'updated' : (lockOption.type !== 'numMinute') || (lockDurationMin !== lockOption.value)}" [ngModel]="lockDurationMin">
