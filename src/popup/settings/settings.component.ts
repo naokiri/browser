@@ -96,8 +96,8 @@ export class SettingsComponent implements OnInit {
     }
 
     async changeLockOptionDuration(newValue: number) {
-        if (newValue < 1) {
-            newValue = 1;
+        if (newValue < 0) {
+            newValue = 0;
             this.lockDurationRef.nativeElement.value = newValue;
         }
         if (newValue > 1440) {
