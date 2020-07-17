@@ -25,20 +25,27 @@
         <div class="box-header">{{'security' | i18n}}</div>
         <div class="box-content single-line">
             <div class="box-content-row display-block" appBoxRow>
-                <label for="lockOption">{{'lockOptions' | i18n}}</label>
-                <select #lockOptionsSelect id="lockOption" name="LockOptions" [ngModel]="lockOptionType"
-                    (ngModelChange)="updateLockOptionType($event)">
-                    <option *ngFor="let o of lockOptionTypes" [ngValue]="o.value">{{o.name}}</option>
+                <label for="vaultTimeout">{{'vaultTimeout' | i18n}}</label>
+                <select #vaultTimeoutSelect id="vaultTimeout" name="VaultTimeouts" [ngModel]="selectedTimeoutType"
+                    (ngModelChange)="saveVaultTimeoutType($event)">
+                    <option *ngFor="let o of vaultTimeouts" [ngValue]="o.value">{{o.name}}</option>
                 </select>
-                <div [hidden]="lockOptionType !== 'numMinute'">
-                    <!-- TODO: Translation -->
-                    <label for="lockDuration">Time to lock (minute)</label>
-                    <div class="lock-duration">
-                        <input id="lockDuration" #lockDurationInput type="number" (ngModelChange)="changeLockOptionDuration($event)"
-                               [ngClass]="{'updated' : (lockOption.type !== 'numMinute') || (lockDurationMin !== lockOption.value)}" [ngModel]="lockDurationMin">
-                        <input class="btn" type="button" (click)="saveLockOptionDuration()"  value="Save">
-                    </div>
+            </div>
+            <div [hidden]="selectedTimeoutType !== 'numMinute'">
+                <!-- TODO: Translation -->
+                <label for="timeoutDuration">Timeout (minute)</label>
+                <div class="timeout-duration">
+                    <input id="timeoutDuration" #timeoutDurationInput type="number" (ngModelChange)="changeTimeoutDuration($event)"
+                           [ngClass]="{'updated' : (vaultTimeout.type !== 'numMinute') || (timeoutDurationMin !== vaultTimeout.value)}" [ngModel]="timeoutDurationMin">
+                    <input class="btn" type="button" (click)="saveTimeoutDuration()"  value="Save">
                 </div>
+            </div>
+            <div class="box-content-row display-block" appBoxRow>
+                <label for="vaultTimeoutAction">{{'vaultTimeoutAction' | i18n}}</label>
+                <select #vaultTimeoutActionSelect id="vaultTimeoutAction" name="VaultTimeoutActions"
+                    [ngModel]="vaultTimeoutAction" (ngModelChange)="saveVaultTimeoutAction($event)">
+                    <option *ngFor="let o of vaultTimeoutActions" [ngValue]="o.value">{{o.name}}</option>
+                </select>
             </div>
             <div class="box-content-row box-content-row-checkbox" appBoxRow>
                 <label for="pin">{{'unlockWithPin' | i18n}}</label>

@@ -91,6 +91,9 @@
   "vaultLocked": {
     "message": "Trezor je zamknutý."
   },
+  "vaultLoggedOut": {
+    "message": "Vault is logged out."
+  },
   "autoFillInfo": {
     "message": "Nie sú prístupné žiadne prihlasovacie údaje na automatické vyplnenie pre aktuálnu kartu."
   },
@@ -212,11 +215,11 @@
     "message": "Oddeľovač slov"
   },
   "capitalize": {
-    "message": "Capitalize",
+    "message": "Prvé písmeno veľkým",
     "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
-    "message": "Include Number"
+    "message": "Zahrnúť číslo"
   },
   "minNumbers": {
     "message": "Minimum číslic"
@@ -306,7 +309,7 @@
     "message": "Odomknúť"
   },
   "loggedInAsOn": {
-    "message": "Logged in as $EMAIL$ on $HOSTNAME$.",
+    "message": "Prihlásený ako $EMAIL$ na $HOSTNAME$.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -321,8 +324,8 @@
   "invalidMasterPassword": {
     "message": "Neplatné hlavné heslo"
   },
-  "lockOptions": {
-    "message": "Možnosti uzamknutia"
+  "vaultTimeout": {
+    "message": "Vault Timeout"
   },
   "lockNow": {
     "message": "Uzamknúť teraz"
@@ -495,7 +498,7 @@
     "message": "Naozaj chcete odstrániť túto položku?"
   },
   "deletedItem": {
-    "message": "Položka odstránená"
+    "message": "Odstránená položka"
   },
   "overwritePassword": {
     "message": "Prepísať heslo"
@@ -876,11 +879,17 @@
   "experimentalFeature": {
     "message": "Toto je zatiaľ experimentálna funkcia. Použite na vlastné riziko."
   },
+  "commandOpenPopup": {
+    "message": "Otvoriť vyskakovacie okno trezora"
+  },
+  "commandOpenSidebar": {
+    "message": "Otvoriť trezor v bočnom paneli"
+  },
   "commandAutofillDesc": {
-    "message": "Automaticky vyplniť naposledy použité prihlasovacie údaje pre túto stránku."
+    "message": "Automaticky vyplniť naposledy použité prihlasovacie údaje pre túto stránku"
   },
   "commandGeneratePasswordDesc": {
-    "message": "Vygenerovať a skopírovať nové náhodné heslo do schránky."
+    "message": "Vygenerovať a skopírovať nové náhodné heslo do schránky"
   },
   "privateModeMessage": {
     "message": "Bohužiaľ, toto okno nie je dostupné v privátnom režime prehliadača."
@@ -898,7 +907,7 @@
     "message": "Nové vlastné pole"
   },
   "dragToSort": {
-    "message": "Drag to sort"
+    "message": "Zoradiť presúvaním"
   },
   "cfTypeText": {
     "message": "Text"
@@ -913,7 +922,7 @@
     "message": "Kliknutie mimo popup okna na prezretie vášho emailu pre overovací kód spôsobí zavretie tohto popupu. Chcete otvoriť tento popup v novom okne tak, aby sa nezavrel?"
   },
   "popupU2fCloseMessage": {
-    "message": "This browser cannot process U2F requests in this popup window. Do you want to open this popup in a new window so that you can log in using U2F?"
+    "message": "Tento prehliadač nedokáže spracovať U2F požiadavku v popup okne. Chcete ho otvoriť v novom okne aby ste sa mohli prihlásiť pomocou U2F?"
   },
   "disableFavicon": {
     "message": "Nezobrazovať ikony stránok"
@@ -1145,6 +1154,14 @@
   "toggleOptions": {
     "message": "Voľby prepínača"
   },
+  "toggleCurrentUris": {
+    "message": "Toggle Current URIs",
+    "description": "Toggle the display of the URIs of the currently open tabs in the browser."
+  },
+  "currentUri": {
+    "message": "Current URI",
+    "description": "The URI of one of the current open tabs in the browser."
+  },
   "organization": {
     "message": "Organizácia",
     "description": "An entity of multiple related people (ex. a team or business organization)."
@@ -1231,6 +1248,53 @@
     "message": "Pri reštarte prehliadača zamknúť s hlavným heslom"
   },
   "selectOneCollection": {
-    "message": "You must select at least one collection."
+    "message": "Musíte vybrať aspoň jednu zbierku."
+  },
+  "cloneItem": {
+    "message": "Klonovať položku"
+  },
+  "clone": {
+    "message": "Klonovať"
+  },
+  "passwordGeneratorPolicyInEffect": {
+    "message": "Jedno alebo viac nastavení organizácie ovplyvňujú vaše nastavenia generátora."
+  },
+  "vaultTimeoutAction": {
+    "message": "Vault Timeout Action"
+  },
+  "lock": {
+    "message": "Uzamknúť",
+    "description": "Verb form: to make secure or inaccesible by"
+  },
+  "trash": {
+    "message": "Kôš",
+    "description": "Noun: a special folder to hold deleted items"
+  },
+  "searchTrash": {
+    "message": "Hľadať v koši"
+  },
+  "permanentlyDeleteItem": {
+    "message": "Natrvalo odstrániť položku"
+  },
+  "permanentlyDeleteItemConfirmation": {
+    "message": "Are you sure you want to permanently delete this item?"
+  },
+  "permanentlyDeletedItem": {
+    "message": "Natrvalo odstrániť položku"
+  },
+  "restoreItem": {
+    "message": "Obnoviť položku"
+  },
+  "restoreItemConfirmation": {
+    "message": "Are you sure you want to restore this item?"
+  },
+  "restoredItem": {
+    "message": "Obnovená položka"
+  },
+  "vaultTimeoutLogOutConfirmation": {
+    "message": "Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?"
+  },
+  "vaultTimeoutLogOutConfirmationTitle": {
+    "message": "Timeout Action Confirmation"
   }
 }

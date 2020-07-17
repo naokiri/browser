@@ -65,6 +65,7 @@ import { ActionButtonsComponent } from './components/action-buttons.component';
 import { CiphersListComponent } from './components/ciphers-list.component';
 import { PopOutComponent } from './components/pop-out.component';
 
+import { CalloutComponent } from 'jslib/angular/components/callout.component';
 import { IconComponent } from 'jslib/angular/components/icon.component';
 
 import {
@@ -76,6 +77,7 @@ import localeCa from '@angular/common/locales/ca';
 import localeCs from '@angular/common/locales/cs';
 import localeDa from '@angular/common/locales/da';
 import localeDe from '@angular/common/locales/de';
+import localeEl from '@angular/common/locales/el';
 import localeEnGb from '@angular/common/locales/en-GB';
 import localeEs from '@angular/common/locales/es';
 import localeEt from '@angular/common/locales/et';
@@ -110,6 +112,7 @@ registerLocaleData(localeCa, 'ca');
 registerLocaleData(localeCs, 'cs');
 registerLocaleData(localeDa, 'da');
 registerLocaleData(localeDe, 'de');
+registerLocaleData(localeEl, 'el');
 registerLocaleData(localeEnGb, 'en-GB');
 registerLocaleData(localeEs, 'es');
 registerLocaleData(localeEt, 'et');
@@ -165,6 +168,7 @@ registerLocaleData(localeZhTw, 'zh-TW');
         AutofocusDirective,
         BlurClickDirective,
         BoxRowDirective,
+        CalloutComponent,
         CiphersComponent,
         CiphersListComponent,
         CollectionsComponent,

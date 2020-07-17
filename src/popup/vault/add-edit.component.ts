@@ -5,6 +5,8 @@ import {
     Router,
 } from '@angular/router';
 
+import { BrowserApi } from '../../browser/browserApi';
+
 import { AuditService } from 'jslib/abstractions/audit.service';
 import { CipherService } from 'jslib/abstractions/cipher.service';
 import { CollectionService } from 'jslib/abstractions/collection.service';
@@ -16,6 +18,8 @@ import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 import { StateService } from 'jslib/abstractions/state.service';
 import { UserService } from 'jslib/abstractions/user.service';
 
+import { LoginUriView } from 'jslib/models/view/loginUriView';
+
 import { AddEditComponent as BaseAddEditComponent } from 'jslib/angular/components/add-edit.component';
 
 @Component({
@@ -23,6 +27,7 @@ import { AddEditComponent as BaseAddEditComponent } from 'jslib/angular/componen
     templateUrl: 'add-edit.component.html',
 })
 export class AddEditComponent extends BaseAddEditComponent {
+    currentUris: string[];
     showAttachments = true;
 
     constructor(cipherService: CipherService, folderService: FolderService,
@@ -58,9 +63,13 @@ export class AddEditComponent extends BaseAddEditComponent {
                 this.type = type;
             }
             this.editMode = !params.cipherId;
+
+            if (params.cloneMode != null) {
+                this.cloneMode = params.cloneMode === 'true';
+            }
             await this.load();
 
-            if (!this.editMode) {
+            if (!this.editMode || this.cloneMode) {
                 if (params.name && (this.cipher.name == null || this.cipher.name === '')) {
                     this.cipher.name = params.name;
                 }
@@ -72,6 +81,12 @@ export class AddEditComponent extends BaseAddEditComponent {
                 queryParamsSub.unsubscribe();
             }
         });
+
+        if (!this.editMode) {
+            const tabs = await BrowserApi.tabsQuery({ windowType: 'normal' });
+            this.currentUris = tabs == null ? null :
+                tabs.filter((tab) => tab.url != null && tab.url !== '').map((tab) => tab.url);
+        }
 
         window.setTimeout(() => {
             if (!this.editMode) {
@@ -86,7 +101,11 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     async submit(): Promise<boolean> {
         if (await super.submit()) {
-            this.location.back();
+            if (this.cloneMode) {
+                this.router.navigate(['/tabs/vault']);
+            } else {
+                this.location.back();
+            }
             return true;
         }
 
@@ -136,5 +155,10 @@ export class AddEditComponent extends BaseAddEditComponent {
             this.router.navigate(['/tabs/vault']);
         }
         return confirmed;
+    }
+
+    toggleUriInput(uri: LoginUriView) {
+        const u = (uri as any);
+        u.showCurrentUris = !u.showCurrentUris;
     }
 }

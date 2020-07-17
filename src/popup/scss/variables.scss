@@ -17,15 +17,14 @@ $gray: #555;
 $gray-light: #777;
 $text-muted: $gray-light;
 
-$brand-primary: #3c8dbc;
+$brand-primary: #175DDC;
 $brand-danger: #dd4b39;
 $brand-success: #00a65a;
 $brand-info: #555555;
 $brand-warning: #bf7e16;
-$brand-primary-accent: #286090;
+$brand-primary-accent: #1252A3;
 
-$background-color: #efeff4;
-$background-color-alt: #ecf0f5;
+$background-color: #f0f0f0;
 
 $box-background-color: white;
 $box-background-hover-color: $list-item-hover;
@@ -83,6 +82,8 @@ $themes: (
         logoSuffix: 'dark',
         passwordNumberColor: #007fde,
         passwordSpecialColor: #c40800,
+        calloutBorderColor: $border-color-dark,
+        calloutBackgroundColor: $box-background-color,
     ),
     dark: (
         textColor: #ffffff,
@@ -129,6 +130,8 @@ $themes: (
         logoSuffix: 'white',
         passwordNumberColor: #52bdfb,
         passwordSpecialColor: #ff7c70,
+        calloutBorderColor: #111111,
+        calloutBackgroundColor: #3d3d3d,
     ),
     nord: (
         textColor: $nord5,
@@ -175,6 +178,8 @@ $themes: (
         logoSuffix: 'white',
         passwordNumberColor: $nord8,
         passwordSpecialColor: $nord12,
+        calloutBorderColor: $nord0,
+        calloutBackgroundColor: $nord2,
     ),
 );
 

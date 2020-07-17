@@ -91,6 +91,9 @@
   "vaultLocked": {
     "message": "Trezor je zamknutý."
   },
+  "vaultLoggedOut": {
+    "message": "Jste odhlášeni."
+  },
   "autoFillInfo": {
     "message": "Pro aktuální stránku neexistují žádné přihlašovací údaje."
   },
@@ -321,8 +324,8 @@
   "invalidMasterPassword": {
     "message": "Chybné hlavní heslo"
   },
-  "lockOptions": {
-    "message": "Možnosti zamknutí"
+  "vaultTimeout": {
+    "message": "Časový limit trezoru"
   },
   "lockNow": {
     "message": "Zamknout nyní"
@@ -343,7 +346,7 @@
     "message": "Po 1 minutě"
   },
   "twoMinutes": {
-    "message": "2 minuty"
+    "message": "Po 2 minutách"
   },
   "fiveMinutes": {
     "message": "Po 5 minutách"
@@ -495,7 +498,7 @@
     "message": "Opravdu chcete tuto položku smazat?"
   },
   "deletedItem": {
-    "message": "Položka byla smazána"
+    "message": "Smazaná položka"
   },
   "overwritePassword": {
     "message": "Přepsat heslo"
@@ -876,8 +879,14 @@
   "experimentalFeature": {
     "message": "Toto je momentálně experimentální funkce. Použijte na vlastní riziko."
   },
+  "commandOpenPopup": {
+    "message": "Otevřít vyskakovací okno trezoru"
+  },
+  "commandOpenSidebar": {
+    "message": "Otevřít trezor v postranním panelu"
+  },
   "commandAutofillDesc": {
-    "message": "Automaticky vyplnit poslední použité přihlašovací údaje pro tuto stránku."
+    "message": "Automaticky vyplnit poslední použité přihlašovací údaje pro aktuální web."
   },
   "commandGeneratePasswordDesc": {
     "message": "Vygenerovat a zkopírovat nové náhodné heslo do schránky."
@@ -1145,6 +1154,14 @@
   "toggleOptions": {
     "message": "Přepnout možnosti"
   },
+  "toggleCurrentUris": {
+    "message": "Toggle Current URIs",
+    "description": "Toggle the display of the URIs of the currently open tabs in the browser."
+  },
+  "currentUri": {
+    "message": "Current URI",
+    "description": "The URI of one of the current open tabs in the browser."
+  },
   "organization": {
     "message": "Organizace",
     "description": "An entity of multiple related people (ex. a team or business organization)."
@@ -1232,5 +1249,52 @@
   },
   "selectOneCollection": {
     "message": "Musíte vybrat alespoň jednu kolekci."
+  },
+  "cloneItem": {
+    "message": "Duplikovat položku"
+  },
+  "clone": {
+    "message": "Duplikovat"
+  },
+  "passwordGeneratorPolicyInEffect": {
+    "message": "Jedna nebo více zásad organizace ovlivňují nastavení generátoru."
+  },
+  "vaultTimeoutAction": {
+    "message": "Akce při vypršení časového limitu"
+  },
+  "lock": {
+    "message": "Zamknout",
+    "description": "Verb form: to make secure or inaccesible by"
+  },
+  "trash": {
+    "message": "Koš",
+    "description": "Noun: a special folder to hold deleted items"
+  },
+  "searchTrash": {
+    "message": "Hledat v koši"
+  },
+  "permanentlyDeleteItem": {
+    "message": "Trvale smazat položku"
+  },
+  "permanentlyDeleteItemConfirmation": {
+    "message": "Opravdu chcete tuto položku trvale smazat?"
+  },
+  "permanentlyDeletedItem": {
+    "message": "Trvale smazaná položka"
+  },
+  "restoreItem": {
+    "message": "Obnovit položku"
+  },
+  "restoreItemConfirmation": {
+    "message": "Opravdu chcete tuto položku obnovit?"
+  },
+  "restoredItem": {
+    "message": "Obnovená položka"
+  },
+  "vaultTimeoutLogOutConfirmation": {
+    "message": "Po vypršení časového limitu dojde k odhlášení. Přístup k trezoru bude odebrán a pro opětovné přihlášení bude vyžadováno online ověření. Opravdu chcete použít toto nastavení?"
+  },
+  "vaultTimeoutLogOutConfirmationTitle": {
+    "message": "Potvrzení akce při vypršení časového limitu"
   }
 }
