@@ -213,8 +213,9 @@ export class SettingsComponent implements OnInit {
     async saveLockOption(lockType: TimeoutValueType) {
         this.previousVaultTimeout = this.vaultTimeout;
         this.vaultTimeout = lockType;
+
         await this.vaultTimeoutService.setVaultTimeoutOptions(
-            this.vaultTimeout != null ? this.vaultTimeout : null,
+            this.vaultTimeout != null ? this.vaultTimeout.value : null,
             this.vaultTimeoutAction);
 
         if (this.previousVaultTimeout == null) {
@@ -242,7 +243,7 @@ export class SettingsComponent implements OnInit {
             }
         }
         this.vaultTimeoutAction = newValue;
-        await this.vaultTimeoutService.setVaultTimeoutOptions(this.vaultTimeout != null ? this.vaultTimeout : null,
+        await this.vaultTimeoutService.setVaultTimeoutOptions(this.vaultTimeout != null ? this.vaultTimeout.value : null,
             this.vaultTimeoutAction);
     }
 
